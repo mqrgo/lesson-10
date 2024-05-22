@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block title %}Журналисты{% endblock %}
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-2 mt-5">
+        <form method="get">
+            {% csrf_token %}
+            {% bootstrap_form filters.form %}
+            <input type="submit" value="Поиск" class="btn btn-success">
+        </form>
+    </div>
+<div class="col">
+    <div class="row justify-content-center">
+        <div class="text-center fw-bold fs-2 mb-3">Журналисты:</div>
+        {% for journalist in journalists %}
+            <div class="col-md-5 border my-2 mx-2">
+                <div class="row p-3">
+                    <div class="col">
+                        {% if journalist.photo %}
+                            <img src="{{ journalist.photo.url }}" alt="" class="img-fluid rounded">
+                        {% endif %}
+                        <hr>
+                        <div><a href="{% url 'journalists:journalists_model-detail' journalist.pk %}" class="btn btn-success">ModelViewSet Detail</a></div>
+                    </div>
+                    <div class="col">
+                        <h2 class="fs-4">{{journalist}}</h2>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">{{journalist.department}}</li>
+                            <li class="list-group-item">Дата рождения: <br>{{journalist.birthday}}</li>
+                            <li class="list-group-item">В браке: {% if journalist.is_married %} Да {% else %} Нет {% endif %}</li>
+                            <li class="list-group-item">Зарплата: {{journalist.salary}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+</div>
+{% endblock %}
